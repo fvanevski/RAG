@@ -2,7 +2,10 @@ import { MDocument } from "@mastra/rag";
 import { embedMany } from "ai";
 import { mastra } from "../index";
 import { createTool } from "@mastra/core/tools";
+import { openai } from "@ai-sdk/openai";
+import { google } from '@ai-sdk/google';
 import { ollama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { z } from "zod";
 
 export const vectorizeTool = createTool ({
@@ -35,16 +38,36 @@ export const vectorizeTool = createTool ({
         separator: "\n",
     });
 
+    const vllm0 = createOpenAICompatible({
+      name: "vllm0",
+      baseURL: "http://localhost:8081/v1", // Adjust to your Ollama server URL
+    });
+
     const { embeddings } = await embedMany({
-        model: ollama.embedding("bge-large"),
+        model: vllm0.textEmbeddingModel("bge-large"),
+        // model: openai.embedding("text-embedding-3-small"),
         values: chunks.map((chunk) => chunk.text),
     });
  
+    // Use PostgreSQL vector store
     const vectorStore = mastra.getVector("pgVector");
-    await vectorStore.createIndex({
+    
+    // Create index if it doesn't exist (will ignore if already exists)
+    try {
+      await vectorStore.createIndex({
         indexName: "embeddings",
-        dimension: 1024,
-    });
+        dimension: 1024, // BGE-large has 1024 dimensions
+      });
+      console.log("Embeddings index ready");
+    } catch (error) {
+      // Index might already exist, check if error is expected
+      if (error instanceof Error && error.message.includes("already exists")) {
+        console.log("Using existing embeddings index");
+      } else {
+        // Re-throw unexpected errors
+        throw error;
+      }
+    }
 
     await vectorStore.upsert({
         indexName: "embeddings",

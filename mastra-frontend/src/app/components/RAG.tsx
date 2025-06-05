@@ -1,3 +1,5 @@
+'use client';
+
 import { useCoAgent, useCoAgentStateRender } from "@copilotkit/react-core";
 import { useRef } from "react";
 import { RAGAgentState } from "@/lib/types";

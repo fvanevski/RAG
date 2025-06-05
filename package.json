@@ -2,9 +2,11 @@
   "name": "rag",
   "version": "1.0.0",
   "description": "",
-  "main": "mastra-backend/index.ts",
   "scripts": {
-    "start": "pnpx tsx mastra-backend/server.ts"
+    "start:backend": "cd mastra-backend && npx mastra dev --dir src/mastra",
+    "start:frontend": "pnpm --prefix mastra-frontend dev",
+    "dev": "concurrently \"pnpm run start:backend\" \"pnpm run start:frontend\"",
+    "start": "pnpm run dev"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,7 @@
   "dependencies": {
     "@ai-sdk/google": "^1.2.19",
     "@ai-sdk/openai": "^1.3.22",
+    "@ai-sdk/openai-compatible": "^0.2.14",
     "@copilotkit/react-core": "^1.8.13",
     "@copilotkit/react-ui": "^1.8.13",
     "@copilotkit/runtime": "^1.8.13",
@@ -28,6 +31,8 @@
     "zod": "^3.25.50"
   },
   "devDependencies": {
+    "concurrently": "^7.6.0",
+    "mastra": "^0.10.3",
     "tsx": "^4.19.4"
   }
 }

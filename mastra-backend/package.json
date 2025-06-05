@@ -1,0 +1,11 @@
+{
+  "name": "mastra-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "mastra dev"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^0.2.14"
+  }
+}

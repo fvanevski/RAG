@@ -1,16 +1,30 @@
+import { createOpenAI, openai } from "@ai-sdk/openai";
 import { ollama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { Agent } from "@mastra/core/agent";
 import { createGraphRAGTool } from "@mastra/rag";
 import { vectorizeTool } from '../tools/vectorize';
 
+const vllm0 = createOpenAICompatible({
+  name: "vllm0",
+  baseURL: "http://localhost:8081/v1", // Adjust to your Ollama server URL
+});
+
 const graphRagTool = createGraphRAGTool({
   vectorStoreName: "pgVector",
   indexName: "embeddings",
-  model: ollama.embedding("bge-large"),
+  model: vllm0.textEmbeddingModel("bge-large"),
+  // model: ollama.embedding("bge-large"),
+  // model: openai.embedding("text-embedding-3-small"),
   graphOptions: {
-    dimension: 1024,
+    dimension: 1024, // BGE-large has 1024 dimensions
     threshold: 0.7,
   },
+});
+
+const lmstudio = createOpenAICompatible({
+   name: "lmstudio",
+   baseURL: "http://localhost:1234/v1",
 });
 
 export const RAGAgentQuery = new Agent({
@@ -25,9 +39,9 @@ Keep each section brief and focus on the most important points.
  
 Important: When asked to answer a question, please base your answer only on the context provided in the tool. 
 If the context doesn't contain enough information to fully answer the question, please state that explicitly.`,
-  model: ollama('hf.co/bartowski/c4ai-command-r7b-12-2024-GGUF:Q5_K_M'),
+  model: lmstudio("c4ai-command-r7b-12-2024"),
   tools: {
     graphRagTool,
     vectorizeTool,
   },
-});
+})
