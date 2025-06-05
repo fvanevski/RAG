@@ -21,9 +21,9 @@ export const vectorizeTool = createTool ({
   }),
 
   execute: async ({ context }) => {
-    let doctext: string;
+    let technicalDoc: MDocument;
     if (context.documentText) {
-      const technicalDoc = new MDocument({
+      technicalDoc = new MDocument({
         text: context.documentText,
         metadata: {
           type: "technical",
@@ -33,7 +33,7 @@ export const vectorizeTool = createTool ({
     } else {
       const response = await fetch(context.documentURL!);
       const HTML = await response.text();
-      const technicalDoc = new MDocument({
+      technicalDoc = new MDocument({
         text: HTML,
         metadata: {
           type: "technical",
