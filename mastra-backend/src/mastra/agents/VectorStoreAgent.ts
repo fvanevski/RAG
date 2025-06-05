@@ -1,5 +1,5 @@
 import { embedMany } from "ai";
-import { mastra } from "../index";
+import { pgVector } from "../vectorStore";
 import { Agent } from "@mastra/core/agent";
 import { createDocumentChunkerTool, MDocument } from "@mastra/rag";
 import { createTool } from "@mastra/core/tools";
@@ -17,7 +17,11 @@ logger.info("Info message");
 logger.warn("Warning message");
 logger.error("Error message");
 
- 
+const vllm0 = createOpenAICompatible({
+  name: "vllm0",
+  baseURL: "http://localhost:8081/v1",
+});
+
 export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
@@ -76,11 +80,6 @@ export const vectorizeTool = createTool ({
     chunks.forEach((chunk, index) => {
       logger.debug(`Chunk ${index + 1} length: ${chunk.content.length}`);
     });
-    
-  const vllm0 = createOpenAICompatible({
-    name: "vllm0",
-    baseURL: "http://localhost:8081/v1",
-  });
 
     try {
     const { embeddings } = await embedMany({
@@ -98,12 +97,8 @@ export const vectorizeTool = createTool ({
   }
   try {
     // Use PostgreSQL vector store
-    const vectorStore = mastra.getVector("pgVector");
-  } catch (error) {
-    logger.error("Error getting vector store", { error });
-    throw error;
-  }
 
+    const vectorStore = pgVector;
     // Create the shared "embeddings" index if it doesn't exist
     try {
       await vectorStore.createIndex({
