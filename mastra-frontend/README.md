@@ -20,11 +20,13 @@ The frontend application for the Mastra Weather AI Assistant, built with Next.js
 
 2. **Set up environment variables**
 
-   Create a `.env.local` file:
+  Create a `.env.local` file:
 
-   ```env
-   NEXT_PUBLIC_COPILOTKIT_API_URL=http://localhost:4000/api/copilotkit
-   ```
+  ```env
+  NEXT_PUBLIC_COPILOTKIT_API_URL=http://localhost:4000/api/copilotkit
+  # URL where the backend is running
+  MASTRA_BACKEND_URL=http://127.0.0.1:8000/mastra
+  ```
 
 3. **Start the development server**
 

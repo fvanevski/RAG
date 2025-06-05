@@ -2,7 +2,7 @@
   "name": "rag",
   "version": "1.0.0",
   "description": "",
-  "main": "src/mastra-frontend/index.ts",
+  "main": "mastra-backend/index.ts",
   "scripts": {
     "start": "pnpx tsx mastra-backend/server.ts"
   },
