@@ -36,4 +36,4 @@ export const mastra = new Mastra({
   },
 });
 
-// Note: vectorizeTool is already included in RAGAgentQuery.tools for agent tool execution
+// vectorizeTool is exposed by VectorStoreAgent (see ./agents/VectorStoreAgent.ts)
