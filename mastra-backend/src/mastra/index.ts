@@ -16,8 +16,19 @@ export const mastra = new Mastra({
   },
   logger: new PinoLogger({
     name: "Mastra",
-    level: "info",
+    level: "debug",
   }),
+telemetry: {
+    serviceName: "my-app",
+    enabled: true,
+    sampling: {
+      type: "always_on",
+    },
+    export: {
+      type: "otlp",
+      endpoint: "http://localhost:4318", // SigNoz local endpoint
+    },
+  },
   server: {
     cors: {
       origin: "*",

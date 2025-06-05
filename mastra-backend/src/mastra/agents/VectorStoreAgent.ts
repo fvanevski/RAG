@@ -5,8 +5,20 @@ import { createDocumentChunkerTool, MDocument } from "@mastra/rag";
 import { createTool } from "@mastra/core/tools";
 import { ollama } from 'ollama-ai-provider';
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { PinoLogger } from "@mastra/loggers";
+import { createOpenAI } from "@ai-sdk/openai";}
 import { z } from "zod";
 
+const logger = new PinoLogger({
+      name: "Mastra",
+      level: "debug",
+    });
+
+logger.debug("Debug message");
+logger.info("Info message");
+logger.warn("Warning message");
+logger.error("Error message");
+  
 export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
@@ -21,6 +33,9 @@ export const vectorizeTool = createTool ({
   }),
 
   execute: async ({ context }) => {
+
+    logger.debug("Executing vectorizeTool");
+
     let technicalDoc: MDocument;
     if (context.documentText) {
       technicalDoc = new MDocument({
@@ -41,7 +56,11 @@ export const vectorizeTool = createTool ({
         },
       });
     }
-    
+    logger.debug("Document fetched or provided", {
+      length: technicalDoc.text.length,
+      metadata: technicalDoc.metadata,
+    });
+
     const chunker = createDocumentChunkerTool({
       doc: technicalDoc,
       params: {
@@ -56,7 +75,7 @@ export const vectorizeTool = createTool ({
      
     // Process the chunks
     chunks.forEach((chunk, index) => {
-      console.log(`Chunk ${index + 1} length: ${chunk.content.length}`);
+      logger.debug(`Chunk ${index + 1} length: ${chunk.content.length}`);
     });
     
     const vllm0 = createOpenAICompatible({
@@ -65,11 +84,15 @@ export const vectorizeTool = createTool ({
     });
 
     const { embeddings } = await embedMany({
-        model: vllm0.textEmbeddingModel("bge-large"),
+      model: vllm0.textEmbeddingModel("BAAI/bge-large-en-v1.5"),
         // model: openai.embedding("text-embedding-3-small"),
         values: chunks.map((chunk) => chunk.text),
     });
- 
+
+    logger.debug("Embeddings generated", {
+      count: embeddings.length,
+    });
+
     // Use PostgreSQL vector store
     const vectorStore = mastra.getVector("pgVector");
     
@@ -79,13 +102,14 @@ export const vectorizeTool = createTool ({
         indexName: "embeddings",
         dimension: 1024, // BGE-large has 1024 dimensions
       });
-      console.log("Embeddings index ready");
+      logger.info("Embeddings index ready");
     } catch (error) {
       // Index might already exist, check if error is expected
       if (error instanceof Error && error.message.includes("already exists")) {
-        console.log("Using existing embeddings index");
+        logger.info("Using existing embeddings index");
       } else {
         // Re-throw unexpected errors
+        logger.error("Error creating embeddings index", { error }); 
         throw error;
       }
     }
@@ -98,18 +122,19 @@ export const vectorizeTool = createTool ({
             text: chunk.text,
         })),
     });
-    
+    logger.info("Vectors upserted");
+
     return {
       chunkLength: chunks.length,
     };
   },
 });
-
+logger.info("VectorStoreAgent initialized");
 const lmstudio = createOpenAICompatible({
    name: "lmstudio",
    baseURL: "http://localhost:1234/v1",
 });
-
+logger.info("lmstudio initialized");  
 export const VectorStoreAgent = new Agent ({
   name: "VectorStoreAgent",
   instructions: "This agent vectorizes text chunks and stores them in a vector store. It can fetch documents from a URL or use raw text input. The agent will create embeddings for the text chunks and store them in a PostgreSQL vector store.",
@@ -118,3 +143,7 @@ export const VectorStoreAgent = new Agent ({
     vectorizeTool,
   },
 });
+logger.info("VectorStoreAgent created");
+// Export the agent for use in other parts of the application
+export default VectorStoreAgent;
+// This agent can be used in the Mastra framework to handle vectorization tasks
