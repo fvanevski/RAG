@@ -33,7 +33,7 @@ export default function RootLayout({
         <Header />
         <CopilotKit
           publicApiKey={publicApiKey}
-          agent="RAGAgent"
+          agent="RAGAgentQuery"
           showDevConsole={false}>
           {children}
         </CopilotKit>
