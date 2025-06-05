@@ -9,7 +9,7 @@ function RAG() {
   // Reference to track if RAG request is in progress
   const isRAGInProgress = useRef(false); // Connect to the RAG agent's state using CopilotKit's useCoAgent hook
   const { state, stop: stopRAGAgent } = useCoAgent<RAGAgentState>({
-    name: "RAGAgent",
+    name: "RAGAgentQuery",
     initialState: {
       status: "initializing",
       currentStep: "RAGAgent_analysis",
@@ -21,7 +21,7 @@ function RAG() {
 
   // Implement useCoAgentStateRender hook
   useCoAgentStateRender({
-    name: "RAGAgent",
+    name: "RAGAgentQuery",
     handler: ({ nodeName }) => {
       // Handle completion when the RAG agent finishes
       if (nodeName === "__end__" || state?.status === "completed") {
