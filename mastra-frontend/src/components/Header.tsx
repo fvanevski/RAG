@@ -37,7 +37,7 @@ export default function Header() {
             <Link
               href="/copilotkit"
               className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
-              Weather AI
+              Graph RAG
             </Link>
             <Link
               href="#features"
@@ -56,7 +56,7 @@ export default function Header() {
             <Link
               href="/copilotkit"
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-              Try Weather AI
+              Try Graph RAG
             </Link>
           </div>
 
@@ -116,7 +116,7 @@ export default function Header() {
                 href="/copilotkit"
                 className="block px-3 py-2 text-base font-medium text-foreground/80 hover:text-foreground hover:bg-accent rounded-md"
                 onClick={() => setIsMenuOpen(false)}>
-                Weather AI
+                Graph RAG
               </Link>
               <Link
                 href="#features"
@@ -135,7 +135,7 @@ export default function Header() {
                   href="/copilotkit"
                   className="block w-full text-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
                   onClick={() => setIsMenuOpen(false)}>
-                  Try Weather AI
+                  Try Graph RAG
                 </Link>
               </div>
             </div>

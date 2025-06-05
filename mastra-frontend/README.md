@@ -1,6 +1,6 @@
-# Mastra Weather AI - Frontend
+# Mastra Graph RAG Assistant - Frontend
 
-The frontend application for the Mastra Weather AI Assistant, built with Next.js 15, CopilotKit, and Tailwind CSS.
+The frontend application for the Mastra Graph RAG Assistant, built with Next.js 15, CopilotKit, and Tailwind CSS.
 
 ## 🚀 Quick Start
 
@@ -45,7 +45,7 @@ src/
 ├── app/
 │   ├── api/copilotkit/route.ts    # CopilotKit API integration
 │   ├── copilotkit/                # Chat interface pages
-│   ├── components/Weather.tsx     # Weather display component
+│   ├── components/RAG.tsx        # Graph RAG UI component
 │   ├── layout.tsx                 # Root layout with Header
 │   ├── page.tsx                   # Landing page
 │   └── globals.css               # Global styles
@@ -99,7 +99,7 @@ The chat interface is powered by CopilotKit:
 
 - Chat components are in `src/app/copilotkit/`
 - API route handles backend communication in `src/app/api/copilotkit/route.ts`
-- Weather-specific UI in `src/app/components/Weather.tsx`
+- Graph RAG UI in `src/app/components/RAG.tsx`
 
 ## 🚀 Deployment
 

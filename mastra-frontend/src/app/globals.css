@@ -114,28 +114,28 @@
   }
 }
 
-/* Custom weather report styling */
-.weather-report {
+/* Styling for RAG answers */
+.rag-answer {
   font-feature-settings: "kern" 1, "liga" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.weather-report p {
+.rag-answer p {
   line-height: 1.6;
   margin-bottom: 0.75rem;
 }
 
-.weather-report p:last-child {
+.rag-answer p:last-child {
   margin-bottom: 0;
 }
 
 /* Better emoji rendering */
-.weather-report p,
-.weather-report li,
-.weather-report h1,
-.weather-report h2,
-.weather-report h3 {
+.rag-answer p,
+.rag-answer li,
+.rag-answer h1,
+.rag-answer h2,
+.rag-answer h3 {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", "Noto Color Emoji";
