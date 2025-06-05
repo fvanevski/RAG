@@ -13,7 +13,7 @@ export default function Home() {
   const handleURLSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploadStatus('Indexing URL...');
-    const res = await fetch(`/api/agents/RAGAgentQuery/tools/vectorize/execute`, {
+    const res = await fetch(`/api/agents/VectorStoreAgent/tools/vectorize/execute`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ documentURL: docURL }),
@@ -27,7 +27,7 @@ export default function Home() {
     if (!file) return;
     setUploadStatus('Indexing file content...');
     const text = await file.text();
-    const res = await fetch(`/api/agents/RAGAgentQuery/tools/vectorize/execute`, {
+    const res = await fetch(`/api/agents/VectorStoreAgent/tools/vectorize/execute`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ documentText: text }),

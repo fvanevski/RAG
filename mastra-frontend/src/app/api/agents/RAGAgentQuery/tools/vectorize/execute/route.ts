@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const backendUrl = process.env.MASTRA_BACKEND_URL ?? "http://127.0.0.1:4111";
     
     // Forward the request to the Mastra backend using the correct endpoint format
-    const response = await fetch(`${backendUrl}/api/agents/RAGAgentQuery/tools/vectorize/execute`, {
+    const response = await fetch(`${backendUrl}/api/agents/VectorStoreAgent/tools/vectorize/execute`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
