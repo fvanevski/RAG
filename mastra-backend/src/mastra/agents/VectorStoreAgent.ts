@@ -3,10 +3,8 @@ import { mastra } from "../index";
 import { Agent } from "@mastra/core/agent";
 import { createDocumentChunkerTool, MDocument } from "@mastra/rag";
 import { createTool } from "@mastra/core/tools";
-import { ollama } from 'ollama-ai-provider';
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { PinoLogger } from "@mastra/loggers";
-import { createOpenAI } from "@ai-sdk/openai";}
 import { z } from "zod";
 
 const logger = new PinoLogger({
@@ -18,6 +16,11 @@ logger.debug("Debug message");
 logger.info("Info message");
 logger.warn("Warning message");
 logger.error("Error message");
+
+const vllm0 = createOpenAICompatible({
+  name: "vllm0",
+  baseURL: "http://localhost:8081/v1",
+});
   
 export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
@@ -78,11 +81,6 @@ export const vectorizeTool = createTool ({
       logger.debug(`Chunk ${index + 1} length: ${chunk.content.length}`);
     });
     
-    const vllm0 = createOpenAICompatible({
-      name: "vllm0",
-      baseURL: "http://localhost:8081/v1", // Adjust to your Ollama server URL
-    });
-
     const { embeddings } = await embedMany({
       model: vllm0.textEmbeddingModel("BAAI/bge-large-en-v1.5"),
         // model: openai.embedding("text-embedding-3-small"),
@@ -146,4 +144,4 @@ export const VectorStoreAgent = new Agent ({
 logger.info("VectorStoreAgent created");
 // Export the agent for use in other parts of the application
 export default VectorStoreAgent;
-// This agent can be used in the Mastra framework to handle vectorization tasks
+// This agent can be used in the Mastra framework to handle vectorization tasks.
