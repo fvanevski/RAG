@@ -7,7 +7,7 @@ import { ollama } from 'ollama-ai-provider';
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { z } from "zod";
 
-const vectorizeTool = createTool ({
+export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
   inputSchema: z.object({
