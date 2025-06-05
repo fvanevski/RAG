@@ -11,7 +11,8 @@ const vllm0 = createOpenAICompatible({
 
 const graphRagTool = createGraphRAGTool({
   vectorStoreName: "pgVector",
-  indexName: "docs",
+  // Use the shared "embeddings" index for RAG operations
+  indexName: "embeddings",
   model: vllm0.textEmbeddingModel("bge-large"),
   // model: ollama.embedding("bge-large"),
   // model: openai.embedding("text-embedding-3-small"),
