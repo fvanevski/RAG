@@ -17,11 +17,7 @@ logger.info("Info message");
 logger.warn("Warning message");
 logger.error("Error message");
 
-const vllm0 = createOpenAICompatible({
-  name: "vllm0",
-  baseURL: "http://localhost:8081/v1",
-});
-  
+ 
 export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
@@ -81,6 +77,11 @@ export const vectorizeTool = createTool ({
       logger.debug(`Chunk ${index + 1} length: ${chunk.content.length}`);
     });
     
+  const vllm0 = createOpenAICompatible({
+    name: "vllm0",
+    baseURL: "http://localhost:8081/v1",
+  });
+
     try {
     const { embeddings } = await embedMany({
       model: vllm0.textEmbeddingModel("BAAI/bge-large-en-v1.5"),
