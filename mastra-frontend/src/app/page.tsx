@@ -111,7 +111,7 @@ export default function Home() {
                           </div>
                           <div className="flex-1">
                             <p className="text-sm text-gray-600">
-                              Feed me some documentation and i'll be an expert advisor!
+                              Feed me some documentation and I&apos;ll be an expert advisor!
                             </p>
                           </div>
                         </div>

@@ -103,13 +103,13 @@ function RAG() {
               <line x1="9" y1="9" x2="15" y2="15"></line>
             </svg>
             <h3 className="text-lg font-semibold text-red-800">
-              Weather Error
+              Graph RAG Error
             </h3>
           </div>
 
           <p className="text-red-700 mb-4">
             {state.error ||
-              "Unable to retrieve weather information. Please try again."}
+              "Unable to retrieve graph information. Please try again."}
           </p>
 
           <button
@@ -174,7 +174,7 @@ function RAG() {
     );
   }
 
-  // If weather request is in progress, show loading state
+  // If graph request is in progress, show loading state
   if (
     state?.status &&
     state.status !== "completed" &&
@@ -184,7 +184,7 @@ function RAG() {
       <div className="flex flex-col gap-4 h-full max-w-4xl mt-4 mx-auto">
         <div className="p-6 bg-white border rounded-lg shadow-sm w-full">
           <h3 className="text-xl font-semibold mb-4">
-            Getting Weather Information
+            Processing Graph RAG Query
           </h3>
 
           <div className="status-container mb-6">
@@ -202,7 +202,7 @@ function RAG() {
               { stage: "analyzing_request", label: "Analyzing Request" },
               {
                 stage: "fetching_weather_data",
-                label: "Fetching Weather Data",
+                label: "Retrieving Graph Data",
               },
               { stage: "formatting_response", label: "Formatting Response" },
             ].map(({ stage, label }) => {
@@ -259,23 +259,23 @@ function RAG() {
     <div className="flex flex-col gap-4 h-full max-w-4xl mt-4 mx-auto">
       <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-200 w-full">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold">Weather Assistant</h3>
+          <h3 className="text-xl font-semibold">Graph RAG Assistant</h3>
           <div className="text-sm px-3 py-1 bg-gray-100 rounded-full">
             Ready
           </div>
         </div>
         <div className="text-gray-600 mb-4">
           <p>
-            Ask me about the weather for any location and I&apos;ll provide
-            current conditions and forecasts.
+            Ask me questions about your knowledge graph and I&apos;ll return
+            answers with relevant context.
           </p>
         </div>{" "}
         <div className="bg-gray-50 p-4 rounded-md">
           <h4 className="font-medium text-gray-800 mb-2">Examples:</h4>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>• &quot;What&apos;s the weather like in New York?&quot;</li>
-            <li>• &quot;Show me the forecast for Tokyo&quot;</li>
-            <li>• &quot;Is it going to rain in London today?&quot;</li>
+            <li>• &quot;How is Alice connected to Bob?&quot;</li>
+            <li>• &quot;List documents related to Project X&quot;</li>
+            <li>• &quot;Show relationships for node 42&quot;</li>
           </ul>
         </div>
       </div>

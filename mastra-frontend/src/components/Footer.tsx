@@ -21,8 +21,8 @@ export default function Footer() {
               <span className="text-xl font-bold">Mastra</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Intelligent weather forecasting powered by AI. Experience the
-              future of weather predictions.
+              Answers powered by graph retrieval. Explore connections in your
+              data with AI assistance.
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export default function Footer() {
                 <Link
                   href="/copilotkit"
                   className="text-gray-400 hover:text-white transition-colors">
-                  Weather AI
+                  Graph RAG
                 </Link>
               </li>
               <li>
@@ -131,7 +131,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 Mastra Weather AI. All rights reserved.
+              © 2024 Mastra Graph RAG Assistant. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0 flex space-x-6">
               <Link
