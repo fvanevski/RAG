@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/mastra-frontend/index.ts",
   "scripts": {
-    "start": "pnpx tsx src/mastra/index.ts"
+    "start": "pnpx tsx mastra-backend/server.ts"
   },
   "keywords": [],
   "author": "",
