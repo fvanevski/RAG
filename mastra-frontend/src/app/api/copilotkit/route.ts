@@ -11,9 +11,11 @@ import {
 // Import NextRequest type for handling Next.js API requests
 import { NextRequest } from "next/server";
 
-// Create a new HttpAgent instance that connects to the Mastra backend running locally
+// Create a new HttpAgent instance that connects to the Mastra backend
+// The backend URL can be configured with the `MASTRA_BACKEND_URL` environment variable
+// and defaults to the local development address.
 const RAGAgent = new HttpAgent({
-  url: "http://127.0.0.1:8000/mastra",
+  url: process.env.MASTRA_BACKEND_URL ?? "http://127.0.0.1:8000/mastra",
 });
 
 // Initialize the CopilotKit runtime with our research agent
