@@ -1,14 +1,13 @@
-import { MDocument } from "@mastra/rag";
 import { embedMany } from "ai";
 import { mastra } from "../index";
+import { Agent } from "@mastra/core/agent";
+import { createDocumentChunkerTool, MDocument } from "@mastra/rag";
 import { createTool } from "@mastra/core/tools";
-import { openai } from "@ai-sdk/openai";
-import { google } from '@ai-sdk/google';
 import { ollama } from 'ollama-ai-provider';
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { z } from "zod";
 
-export const vectorizeTool = createTool ({
+const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
   inputSchema: z.object({
@@ -22,22 +21,44 @@ export const vectorizeTool = createTool ({
   }),
 
   execute: async ({ context }) => {
-    let text: string;
+    let doctext: string;
     if (context.documentText) {
-      text = context.documentText;
+      const technicalDoc = new MDocument({
+        text: context.documentText,
+        metadata: {
+          type: "technical",
+          version: "1.0",
+        },
+      });
     } else {
       const response = await fetch(context.documentURL!);
-      text = await response.text();
+      const HTML = await response.text();
+      const technicalDoc = new MDocument({
+        text: HTML,
+        metadata: {
+          type: "technical",
+          version: "1.0",
+        },
+      });
     }
     
-    const doc = MDocument.fromText(text);
-    const chunks = await doc.chunk({
+    const chunker = createDocumentChunkerTool({
+      doc: technicalDoc,
+      params: {
         strategy: "recursive",
-        size: 512,
-        overlap: 50,
-        separator: "\n",
+        size: 1024, // Larger chunks
+        overlap: 100, // More overlap
+        separator: "\n\n", // Split on double newlines
+      },
     });
-
+     
+    const { chunks } = await chunker.execute();
+     
+    // Process the chunks
+    chunks.forEach((chunk, index) => {
+      console.log(`Chunk ${index + 1} length: ${chunk.content.length}`);
+    });
+    
     const vllm0 = createOpenAICompatible({
       name: "vllm0",
       baseURL: "http://localhost:8081/v1", // Adjust to your Ollama server URL
@@ -80,5 +101,19 @@ export const vectorizeTool = createTool ({
     return {
       chunkLength: chunks.length,
     };
+  },
+});
+
+const lmstudio = createOpenAICompatible({
+   name: "lmstudio",
+   baseURL: "http://localhost:1234/v1",
+});
+
+export const VectorStoreAgent = new Agent ({
+  name: "VectorStoreAgent",
+  instructions: "This agent vectorizes text chunks and stores them in a vector store. It can fetch documents from a URL or use raw text input. The agent will create embeddings for the text chunks and store them in a PostgreSQL vector store.",
+  model: lmstudio("c4ai-command-r7b-12-2024"),
+  tools: {
+    vectorizeTool,
   },
 });

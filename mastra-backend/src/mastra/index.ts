@@ -5,10 +5,10 @@ import { registerCopilotKit } from "@mastra/agui";
 import { PgVector } from "@mastra/pg";
 import "dotenv/config";
 import { RAGAgentQuery } from "./agents/RAGAgent";
-import { vectorizeTool } from "./tools/vectorize";
+import { VectorStoreAgent } from "./agents/VectorStoreAgent";
 
 export const mastra = new Mastra({
-  agents: { RAGAgentQuery },
+  agents: { RAGAgentQuery, VectorStoreAgent },
   vectors: { 
     pgVector: new PgVector({
       connectionString: process.env.POSTGRES_CONNECTION_STRING!,
@@ -27,7 +27,7 @@ export const mastra = new Mastra({
     apiRoutes: [
       registerCopilotKit({
         path: "/copilotkit",
-        resourceId: "RAGAgent",
+        resourceId: "App",
         setContext: (c, runtimeContext) => {
           runtimeContext.set("user-id", c.req.header("X-User-ID"));
         },

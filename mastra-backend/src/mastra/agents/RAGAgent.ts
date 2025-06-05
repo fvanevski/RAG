@@ -3,7 +3,6 @@ import { ollama } from 'ollama-ai-provider';
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { Agent } from "@mastra/core/agent";
 import { createGraphRAGTool } from "@mastra/rag";
-import { vectorizeTool } from '../tools/vectorize';
 
 const vllm0 = createOpenAICompatible({
   name: "vllm0",
@@ -12,13 +11,15 @@ const vllm0 = createOpenAICompatible({
 
 const graphRagTool = createGraphRAGTool({
   vectorStoreName: "pgVector",
-  indexName: "embeddings",
+  indexName: "docs",
   model: vllm0.textEmbeddingModel("bge-large"),
   // model: ollama.embedding("bge-large"),
   // model: openai.embedding("text-embedding-3-small"),
   graphOptions: {
     dimension: 1024, // BGE-large has 1024 dimensions
-    threshold: 0.7,
+    threshold: 0.8,
+    randomWalkSteps: 200,
+    restartProb: 0.2,
   },
 });
 
@@ -42,6 +43,5 @@ If the context doesn't contain enough information to fully answer the question, 
   model: lmstudio("c4ai-command-r7b-12-2024"),
   tools: {
     graphRagTool,
-    vectorizeTool,
   },
 })
