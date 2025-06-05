@@ -2,17 +2,15 @@ import { Mastra } from "@mastra/core";
 import { PinoLogger } from "@mastra/loggers";
 import { registerCopilotKit } from "@mastra/agui";
 
-import { PgVector } from "@mastra/pg";
 import "dotenv/config";
+import { pgVector } from "./vectorStore";
 import { RAGAgentQuery } from "./agents/RAGAgent";
 import { VectorStoreAgent } from "./agents/VectorStoreAgent";
 
 export const mastra = new Mastra({
   agents: { RAGAgentQuery, VectorStoreAgent },
-  vectors: { 
-    pgVector: new PgVector({
-      connectionString: process.env.POSTGRES_CONNECTION_STRING!,
-    })
+  vectors: {
+    pgVector,
   },
   logger: new PinoLogger({
     name: "Mastra",
