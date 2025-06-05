@@ -73,7 +73,7 @@ export const vectorizeTool = createTool ({
     // Use PostgreSQL vector store
     const vectorStore = mastra.getVector("pgVector");
     
-    // Create index if it doesn't exist (will ignore if already exists)
+    // Create the shared "embeddings" index if it doesn't exist
     try {
       await vectorStore.createIndex({
         indexName: "embeddings",
@@ -90,6 +90,7 @@ export const vectorizeTool = createTool ({
       }
     }
 
+    // Upsert vectors into the shared "embeddings" index
     await vectorStore.upsert({
         indexName: "embeddings",
         vectors: embeddings,
