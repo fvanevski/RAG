@@ -21,7 +21,7 @@ const vllm0 = createOpenAICompatible({
   name: "vllm0",
   baseURL: "http://localhost:8081/v1",
 });
-  
+
 export const vectorizeTool = createTool ({
   id: "vectorize",  // tool id used in endpoints
   description: "A tool to vectorize text chunks and store in a vector store.",
@@ -80,7 +80,8 @@ export const vectorizeTool = createTool ({
     chunks.forEach((chunk, index) => {
       logger.debug(`Chunk ${index + 1} length: ${chunk.content.length}`);
     });
-    
+
+    try {
     const { embeddings } = await embedMany({
       model: vllm0.textEmbeddingModel("BAAI/bge-large-en-v1.5"),
         // model: openai.embedding("text-embedding-3-small"),
@@ -90,10 +91,14 @@ export const vectorizeTool = createTool ({
     logger.debug("Embeddings generated", {
       count: embeddings.length,
     });
-
+  } catch (error) {
+    logger.error("Error generating embeddings", { error });
+    throw error;
+  }
+  try {
     // Use PostgreSQL vector store
+
     const vectorStore = pgVector;
-    
     // Create the shared "embeddings" index if it doesn't exist
     try {
       await vectorStore.createIndex({
@@ -111,8 +116,8 @@ export const vectorizeTool = createTool ({
         throw error;
       }
     }
-
-    // Upsert vectors into the shared "embeddings" index
+try {
+  // Upsert vectors into the shared "embeddings" index
     await vectorStore.upsert({
         indexName: "embeddings",
         vectors: embeddings,
@@ -125,24 +130,28 @@ export const vectorizeTool = createTool ({
     return {
       chunkLength: chunks.length,
     };
+    } catch (error) {
+    logger.error("Error upserting vectors", { error });
+    throw error;
+  }
   },
 });
+
 logger.info("VectorStoreAgent initialized");
 const lmstudio = createOpenAICompatible({
    name: "lmstudio",
    baseURL: "http://localhost:1234/v1",
 });
-logger.info("lmstudio initialized");  
-export const VectorStoreAgent = new Agent ({
+logger.info("lmstudio initialized");
+export const VectorStoreAgent = new Agent({
   name: "VectorStoreAgent",
   instructions: "This agent vectorizes text chunks and stores them in a vector store. It can fetch documents from a URL or use raw text input. The agent will create embeddings for the text chunks and store them in a PostgreSQL vector store.",
   model: lmstudio("c4ai-command-r7b-12-2024"),
   tools: {
-    vectorizeTool,
+    vectorizeTool, 
   },
 });
 logger.info("VectorStoreAgent created");
 // Export the agent for use in other parts of the application
 export default VectorStoreAgent;
 // This agent can be used in the Mastra framework to handle vectorization tasks.
-
