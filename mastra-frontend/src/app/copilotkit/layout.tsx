@@ -14,7 +14,7 @@ const publicApiKey = process.env.NEXT_PUBLIC_COPILOT_API_KEY;
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <CopilotKit publicApiKey={publicApiKey} // The public API key for Copilot Cloud
-      agent="RAGAgentQuery" // The name of the agent to use
+      agent="ragAgent" // The name of the agent to use
       showDevConsole={false} // Show the dev console for debugging
     >
       {children}

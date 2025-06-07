@@ -6,6 +6,17 @@
     "dev": "mastra dev"
   },
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^0.2.14"
+    "@ai-sdk/openai-compatible": "^0.2.14",
+    "@mastra/agui": "^1.0.2",
+    "@mastra/client-js": "^0.10.2",
+    "@mastra/core": "^0.10.3",
+    "@mastra/loggers": "^0.10.1",
+    "@mastra/pg": "^0.10.1",
+    "@mastra/rag": "^0.10.2",
+    "ai": "^4.3.16",
+    "dotenv": "^16.5.0",
+    "llamacpp-ai-provider": "^0.0.9",
+    "playwright": "^1.52.0",
+    "zod": "^3.25.53"
   }
 }

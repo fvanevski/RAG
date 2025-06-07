@@ -14,14 +14,14 @@ import { NextRequest } from "next/server";
 // Create a new HttpAgent instance that connects to the Mastra backend
 // The backend URL can be configured with the `MASTRA_BACKEND_URL` environment variable
 // and defaults to the local development address.
-const RAGAgentQuery = new HttpAgent({
+const ragAgent = new HttpAgent({
   url: process.env.MASTRA_BACKEND_URL ?? "http://127.0.0.1:8000/mastra",
 });
 
 // Initialize the CopilotKit runtime with our research agent
 const runtime = new CopilotRuntime({
   agents: {
-    RAGAgentQuery, // Register the research agent with the runtime
+    ragAgent, // Register the research agent with the runtime
   },
 });
 
